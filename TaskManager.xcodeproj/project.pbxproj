@@ -17,6 +17,8 @@
 		6E7C8E0321F846E300EF46BC /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8E0021F846E300EF46BC /* TaskTableViewCell.swift */; };
 		6E7C8E0421F846E300EF46BC /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E7C8E0121F846E300EF46BC /* TaskTableViewCell.xib */; };
 		6E7C8E0521F846E300EF46BC /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6E7C8E0121F846E300EF46BC /* TaskTableViewCell.xib */; };
+		6E7C8E0721F847D200EF46BC /* GDCheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8E0621F847D200EF46BC /* GDCheckbox.swift */; };
+		6E7C8E0821F847D200EF46BC /* GDCheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8E0621F847D200EF46BC /* GDCheckbox.swift */; };
 		6E8321D221F8101D004286CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8321D121F8101D004286CE /* AppDelegate.swift */; };
 		6E8321D421F8101E004286CE /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8321D321F8101E004286CE /* TaskViewController.swift */; };
 		6E8321D721F8101E004286CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E8321D521F8101E004286CE /* Main.storyboard */; };
@@ -47,6 +49,7 @@
 		6E7C8DFD21F828AE00EF46BC /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		6E7C8E0021F846E300EF46BC /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		6E7C8E0121F846E300EF46BC /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
+		6E7C8E0621F847D200EF46BC /* GDCheckbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GDCheckbox.swift; sourceTree = "<group>"; };
 		6E8321CE21F8101D004286CE /* TaskManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E8321D121F8101D004286CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E8321D321F8101E004286CE /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +135,7 @@
 				6E8321D821F8101F004286CE /* Assets.xcassets */,
 				6E8321DA21F8101F004286CE /* LaunchScreen.storyboard */,
 				6E8321DD21F8101F004286CE /* Info.plist */,
+				6E7C8E0621F847D200EF46BC /* GDCheckbox.swift */,
 			);
 			path = TaskManager;
 			sourceTree = "<group>";
@@ -301,14 +305,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-TaskManager/Pods-TaskManager-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BEMCheckBox/BEMCheckBox.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BEMCheckBox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
@@ -379,6 +381,7 @@
 				6E7C8DFE21F828AE00EF46BC /* Task.swift in Sources */,
 				6E7C8DFA21F816AE00EF46BC /* TaskModel.swift in Sources */,
 				6E8321D221F8101D004286CE /* AppDelegate.swift in Sources */,
+				6E7C8E0721F847D200EF46BC /* GDCheckbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +394,7 @@
 				6E7C8E0321F846E300EF46BC /* TaskTableViewCell.swift in Sources */,
 				6E8321E721F8101F004286CE /* TaskManagerTests.swift in Sources */,
 				6E7C8DF821F8169700EF46BC /* TaskViewModel.swift in Sources */,
+				6E7C8E0821F847D200EF46BC /* GDCheckbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

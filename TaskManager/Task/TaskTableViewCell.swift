@@ -9,7 +9,9 @@
 import UIKit
 
 class TaskTableViewCell: UITableViewCell {
-
+    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var checkbox: GDCheckbox!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -17,8 +19,29 @@ class TaskTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
     
+    func configure(task: Task) {
+        self.contentLabel.text = task.text
+        
+        checkbox.checkColor = UIColor.red
+        checkbox.checkWidth = 3.0
+        checkbox.containerColor = UIColor.blue
+        checkbox.containerWidth = 5.0
+        checkbox.isCircular = true
+        checkbox.isOn = false
+        checkbox.isRadiobox = false
+        checkbox.isSquare = false
+        checkbox.shouldAnimate = false
+        checkbox.shouldFillContainer = false
+        checkbox.isEnabled = false
+        self.checkbox.isOn = task.isDone
+        
+        self.selectionStyle = UITableViewCellSelectionStyle.none
+    }
+    
+    @IBAction func onCheckBoxPress(_ sender: GDCheckbox) {
+        // Do some cool stuff
+    }
 }

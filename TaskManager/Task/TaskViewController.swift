@@ -17,7 +17,8 @@ class TaskViewController: UIViewController {
     private lazy var viewModel = TaskViewModel(
         inputBarText: inputBar.rx.text.asObservable(),
         doneButtonClicked: inputBar.rx.searchButtonClicked.asObservable(),
-        itemSelected: tableView.rx.itemSelected.asObservable()
+        itemSelected: tableView.rx.itemSelected.asObservable(),
+        filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable()
     )
     
     private let disposeBag = DisposeBag()
@@ -25,24 +26,45 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
-        /*inputBar.rx.searchButtonClicked
-            .subscribe { [unowned self] _ in
-                // ボタンタップ時の処理
-                print("aaaa")
-        }*/
+
+        viewModel.deselectRow
+            .bind(to: deselectRow)
+            .disposed(by: disposeBag)
+        
         viewModel.reloadData
             .bind(to: reloadData)
             .disposed(by: disposeBag)
-        
-        
     }
     
     private func setup() {
         inputBar.setImage(UIImage(), for: .search, state: .normal)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = 64
+        tableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "TaskTableViewCell")
+    }
+}
+
+extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.tasks.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell") as! TaskTableViewCell
+        let task = viewModel.tasks[indexPath.row]
+        cell.configure(task: task)
+        return cell
     }
 }
 
 extension TaskViewController {
+    private var deselectRow: Binder<IndexPath> {
+        return Binder(self) { me, indexPath in
+            me.tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
     private var reloadData: Binder<Void> {
         return Binder(self) { me, _ in
             me.tableView.reloadData()

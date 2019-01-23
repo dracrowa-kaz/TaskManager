@@ -10,37 +10,52 @@ import RxSwift
 
 protocol TaskModelProtocol {
     func registerTask(tasks: [Task], text: String) -> Observable<[Task]>
-    func removeTask(tasks: [Task], indexPath: IndexPath) ->  Observable<[Task]>
-    func changeStateTask(tasks: [Task], indexPath: IndexPath) ->  Observable<[Task]>
+    func removeTask(tasks: [Task], id: Double) ->  Observable<[Task]>
+    func changeStateTask(tasks: [Task], id: Double) ->  Observable<[Task]>
+    func clearDoneTasks(tasks: [Task]) ->  Observable<[Task]>
 }
 
 final class TaskModel: TaskModelProtocol {
-    func changeStateTask(tasks: [Task], indexPath: IndexPath) -> Observable<[Task]> {
+    func clearDoneTasks(tasks: [Task]) -> Observable<[Task]> {
         return Observable.create { observer in
-            let taskBeforeChangeState = tasks[indexPath.row]
+            observer.onNext(tasks.filter { !$0.isDone } )
+            observer.onCompleted()
+            return Disposables.create {}
+        }
+    }
+
+    func removeTask(tasks: [Task], id: Double) -> Observable<[Task]> {
+        return Observable.create { observer in
+            guard let index = tasks.index(where: { $0.id == id }) else {
+                return Disposables.create {}
+            }
             var newTasks = tasks
-            newTasks.remove(at: indexPath.row)
-            let newTask = Task(isDone: !taskBeforeChangeState.isDone, text: taskBeforeChangeState.text)
-            newTasks.insert(newTask, at: indexPath.row)
+            newTasks.remove(at: index)
             observer.onNext(newTasks)
             observer.onCompleted()
             return Disposables.create {}
         }
     }
     
-    func removeTask(tasks: [Task], indexPath: IndexPath) -> Observable<[Task]> {
+    func changeStateTask(tasks: [Task], id: Double) -> Observable<[Task]> {
         return Observable.create { observer in
+            guard let index = tasks.index(where: { $0.id == id }) else {
+                return Disposables.create {}
+            }
+            let taskBeforeChangeState = tasks[index]
             var newTasks = tasks
-            newTasks.remove(at: indexPath.row)
+            newTasks.remove(at: index)
+            let newTask = Task(id: taskBeforeChangeState.id, isDone: !taskBeforeChangeState.isDone, text: taskBeforeChangeState.text)
+            newTasks.insert(newTask, at: index)
             observer.onNext(newTasks)
             observer.onCompleted()
             return Disposables.create {}
         }
     }
-
+    
     func registerTask(tasks: [Task], text: String) -> Observable<[Task]> {
         return Observable.create { observer in
-            let newTask = Task(isDone: false, text: text)
+            let newTask = Task(id: Date().timeIntervalSince1970, isDone: false, text: text)
             var newTasks = tasks
             newTasks.append(newTask)
             observer.onNext(newTasks)

@@ -32,32 +32,71 @@ final class TaskViewModel {
         }
     }
     
+    var allTasks: [Task] {
+        return _tasks.value
+    }
+    
     // values
     private let _tasks = BehaviorRelay<[Task]>(value: [])
 
     // Observables
     let reloadData: Observable<Void>
     let deselectRow: Observable<IndexPath>
+    let removeRow: Observable<Void>
     
     init(inputBarText: Observable<String?>,
          doneButtonClicked: Observable<Void>,
          itemSelected: Observable<IndexPath>,
          filterButtonSelected: Observable<Int>,
          filterStatus: FilterStatus = .all,
+         clearButtonTapped: Observable<Void>,
+         itemDelete: Observable<IndexPath>,
          taskModel: TaskModelProtocol = TaskModel()) {
+        
         self.taskModel = taskModel
         self.filterStatus = filterStatus
         self.reloadData = _tasks.map { _ in }
         self.deselectRow = itemSelected.map { $0 }
-
+        self.removeRow = itemSelected.map { $0 }
+            
+        _ = clearButtonTapped
+            .flatMapFirst { [weak self] () -> Observable<Event<[Task]>> in
+                guard let me = self else {
+                    return .empty()
+                }
+                return me.taskModel.clearDoneTasks(tasks: me.allTasks)
+                .materialize()
+            }
+            .flatMap { event -> Observable<[Task]> in
+                event.element.map(Observable.just) ?? .empty()
+            }
+            .bind(to: _tasks)
+            .disposed(by: disposeBag)
+        
+        _ = itemDelete
+            .withLatestFrom(_tasks) { ($0, $1) }
+            .flatMap { [weak self] indexPath, tasks -> Observable<Event<[Task]>> in
+                guard let me = self, indexPath.row < tasks.count else {
+                    return .empty()
+                }
+                let task = me.tasks[indexPath.row]
+                return me.taskModel.removeTask(tasks: me.allTasks, id: task.id)
+                    .materialize()
+            }
+            .flatMap { event -> Observable<[Task]> in
+                event.element.map(Observable.just) ?? .empty()
+            }
+            .bind(to: _tasks)
+            .disposed(by: disposeBag)
+            
         _ = filterButtonSelected
             .subscribe { [weak self] index in
-                print(index)
                 guard
                     let me = self,
                     let indexValue = index.element,
                     let newFilterStatus = FilterStatus(rawValue: indexValue) else { return }
                 me.filterStatus = newFilterStatus
+                me._tasks.accept(me.allTasks)
             }
         
         _ = itemSelected
@@ -66,7 +105,8 @@ final class TaskViewModel {
                 guard let me = self, indexPath.row < tasks.count else {
                     return .empty()
                 }
-                return me.taskModel.changeStateTask(tasks: me.tasks, indexPath: indexPath)
+                let task = me.tasks[indexPath.row]
+                return me.taskModel.changeStateTask(tasks: me.allTasks, id: task.id)
                 .materialize()
             }
             .flatMap { event -> Observable<[Task]> in
@@ -81,7 +121,7 @@ final class TaskViewModel {
                 guard let me = self, let content = text else {
                     return .empty()
                 }
-                return me.taskModel.registerTask(tasks: me.tasks, text: content)
+                return me.taskModel.registerTask(tasks: me.allTasks, text: content)
                 .materialize()
             }
             .flatMap { event -> Observable<[Task]> in

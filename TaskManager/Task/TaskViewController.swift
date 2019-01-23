@@ -18,7 +18,9 @@ class TaskViewController: UIViewController {
         inputBarText: inputBar.rx.text.asObservable(),
         doneButtonClicked: inputBar.rx.searchButtonClicked.asObservable(),
         itemSelected: tableView.rx.itemSelected.asObservable(),
-        filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable()
+        filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable(),
+        clearButtonTapped: inputBar.rx.resultsListButtonClicked.asObservable(),
+        itemDelete: tableView.rx.itemDeleted.asObservable()
     )
     
     private let disposeBag = DisposeBag()
@@ -37,6 +39,7 @@ class TaskViewController: UIViewController {
     }
     
     private func setup() {
+        inputBar.showsCancelButton = false
         inputBar.setImage(UIImage(), for: .search, state: .normal)
         tableView.delegate = self
         tableView.dataSource = self
@@ -55,6 +58,11 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         let task = viewModel.tasks[indexPath.row]
         cell.configure(task: task)
         return cell
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.isEditing = editing
     }
 }
 

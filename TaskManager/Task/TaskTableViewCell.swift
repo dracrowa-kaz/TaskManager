@@ -11,10 +11,11 @@ import UIKit
 class TaskTableViewCell: UITableViewCell {
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var checkbox: GDCheckbox!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        checkbox.isOn = false
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -23,6 +24,7 @@ class TaskTableViewCell: UITableViewCell {
     }
     
     func configure(task: Task) {
+        
         self.contentLabel.text = task.text
         
         checkbox.checkColor = UIColor.red
@@ -30,7 +32,6 @@ class TaskTableViewCell: UITableViewCell {
         checkbox.containerColor = UIColor.blue
         checkbox.containerWidth = 5.0
         checkbox.isCircular = true
-        checkbox.isOn = false
         checkbox.isRadiobox = false
         checkbox.isSquare = false
         checkbox.shouldAnimate = false

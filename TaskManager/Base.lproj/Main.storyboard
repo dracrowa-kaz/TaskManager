@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="120" width="375" height="547"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <searchBar contentMode="redraw" placeholder="タスクを入力" translucent="NO" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zkd-Yv-Z77">
+                            <searchBar contentMode="redraw" placeholder="タスクを入力" showsSearchResultsButton="YES" translucent="NO" showsScopeBar="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zkd-Yv-Z77">
                                 <rect key="frame" x="0.0" y="20" width="375" height="100"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                 <scopeButtonTitles>

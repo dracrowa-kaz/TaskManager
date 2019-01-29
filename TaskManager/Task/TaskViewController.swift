@@ -9,27 +9,30 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import UIKit
 
-class TaskViewController: UIViewController {
+public enum TestError: Error {
+    case test
+}
+
+final class TaskViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputBar: UISearchBar!
     
-    private let buttonHiddenSUbject = BehaviorSubject(value: false)
-    var buttonHidden: Observable<Bool> { return buttonHiddenSUbject }
-    
-    var tasksVariable = Variable([Task]())
-    
+    var deleteIdSubject = PublishSubject<Double>()
+
     private lazy var viewModel = TaskViewModel(
-        inputBarText: inputBar.rx.text.asObservable(),
-        doneButtonClicked: inputBar.rx.searchButtonClicked.asObservable(),
+        inputBarText: inputBar.rx.text.orEmpty.asDriver() ,
+        doneButtonClicked: inputBar.rx.searchButtonClicked.asSignal(),
         itemSelected: tableView.rx.itemSelected.asObservable(),
         filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable(),
         clearButtonTapped: inputBar.rx.resultsListButtonClicked.asObservable(),
-        itemDelete: tableView.rx.itemDeleted.asObservable()
+        itemDelete: tableView.rx.itemDeleted.asObservable(),
+        itemDeleteFromButton: deleteIdSubject.asObserver()
     )
     
     private let disposeBag = DisposeBag()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
@@ -41,14 +44,6 @@ class TaskViewController: UIViewController {
         viewModel.reloadData
             .bind(to: reloadData)
             .disposed(by: disposeBag)
-        
-        buttonHidden.subscribe({ button in
-            self.inputBar.isHidden = button.element!
-        })
-        
-        tasksVariable.asObservable().subscribe({ event in
-            print(event.element?.count)
-        })
     }
     
     private func setup() {
@@ -70,6 +65,11 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell") as! TaskTableViewCell
         let task = viewModel.tasks[indexPath.row]
         cell.configure(task: task)
+        
+        cell.deleteButton.rx.tap.subscribe ({ [unowned self] _ in
+            self.deleteIdSubject.onNext(task.id)
+        })
+        .disposed(by: cell.disposeBag)
         return cell
     }
     
@@ -83,20 +83,6 @@ extension TaskViewController {
     private var deselectRow: Binder<IndexPath> {
         return Binder(self) { me, indexPath in
             me.tableView.deselectRow(at: indexPath, animated: true)
-            print("me.tableView.deselectRow(at: indexPath, animated: true)")
-            
-            do {
-                let task = Task(id: 1, isDone: true, text: "aaa")
-                var tasks = try self.tasksVariable.value
-                tasks.append(task)
-                self.tasksVariable.value = tasks
-                
-                let val = try !self.buttonHiddenSUbject.value()
-                print(val)
-                self.buttonHiddenSUbject.onNext(val)
-            } catch {
-                // buttonHidden が既に完了またはエラーで終了している場合
-            }
         }
     }
     

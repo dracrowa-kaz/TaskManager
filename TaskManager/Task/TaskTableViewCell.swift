@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import RxSwift
 
 class TaskTableViewCell: UITableViewCell {
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var checkbox: GDCheckbox!
-
+    @IBOutlet weak var deleteButton: UIButton!
+    var disposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         checkbox.isOn = false
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.disposeBag = DisposeBag()
+    }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state

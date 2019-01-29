@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -32,17 +31,27 @@
                         </connections>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ujw-Kc-a7l">
-                        <rect key="frame" x="50" y="11" width="239" height="21"/>
+                        <rect key="frame" x="50" y="11" width="195" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6bx-2h-Wtu">
+                        <rect key="frame" x="260" y="-0.5" width="45" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="2iG-t8-tHy"/>
+                            <constraint firstAttribute="width" constant="45" id="BTm-JM-VPV"/>
+                        </constraints>
+                        <state key="normal" title="✗"/>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="6bx-2h-Wtu" firstAttribute="leading" secondItem="Ujw-Kc-a7l" secondAttribute="trailing" constant="15" id="FGq-RB-Fxa"/>
                     <constraint firstItem="Ujw-Kc-a7l" firstAttribute="leading" secondItem="7TV-FP-Arf" secondAttribute="trailing" constant="15" id="FeM-eQ-bxr"/>
+                    <constraint firstAttribute="trailing" secondItem="6bx-2h-Wtu" secondAttribute="trailing" constant="15" id="OEv-AZ-ucc"/>
+                    <constraint firstItem="6bx-2h-Wtu" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="SrI-qD-2un"/>
                     <constraint firstItem="Ujw-Kc-a7l" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="WnV-ye-o50"/>
                     <constraint firstItem="7TV-FP-Arf" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ahL-uY-H52"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Ujw-Kc-a7l" secondAttribute="trailing" constant="15" id="u52-Ti-B4l"/>
                     <constraint firstItem="7TV-FP-Arf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="uXT-R8-Z7e"/>
                 </constraints>
             </tableViewCellContentView>
@@ -50,6 +59,7 @@
             <connections>
                 <outlet property="checkbox" destination="7TV-FP-Arf" id="La9-U6-84p"/>
                 <outlet property="contentLabel" destination="Ujw-Kc-a7l" id="PQ7-1A-ROW"/>
+                <outlet property="deleteButton" destination="6bx-2h-Wtu" id="AjS-8s-8Yw"/>
             </connections>
         </tableViewCell>
     </objects>

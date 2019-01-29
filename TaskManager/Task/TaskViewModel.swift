@@ -15,6 +15,8 @@ enum FilterStatus: Int {
     case completed = 2
 }
 
+var count = 0
+
 final class TaskViewModel {
     private let taskModel: TaskModelProtocol
     private var filterStatus: FilterStatus
@@ -42,23 +44,44 @@ final class TaskViewModel {
     // Observables
     let reloadData: Observable<Void>
     let deselectRow: Observable<IndexPath>
-    let removeRow: Observable<Void>
-    
-    init(inputBarText: Observable<String?>,
-         doneButtonClicked: Observable<Void>,
+
+    init(inputBarText: Driver<String>,
+         doneButtonClicked: Signal<()>,
          itemSelected: Observable<IndexPath>,
          filterButtonSelected: Observable<Int>,
          filterStatus: FilterStatus = .all,
          clearButtonTapped: Observable<Void>,
          itemDelete: Observable<IndexPath>,
+         itemDeleteFromButton: Observable<Double>,
          taskModel: TaskModelProtocol = TaskModel()) {
         
         self.taskModel = taskModel
         self.filterStatus = filterStatus
         self.reloadData = _tasks.map { _ in }
         self.deselectRow = itemSelected.map { $0 }
-        self.removeRow = itemSelected.map { $0 }
-            
+        itemDeleteFromButton
+            .withLatestFrom(inputBarText) { ($0, $1) }
+            .flatMapLatest {
+            [weak self] touple -> Observable<String> in
+                return Observable.of(touple.1)
+            }.subscribe({
+                print($0)
+            })
+        _ = itemDeleteFromButton
+            .subscribe { [weak self] index in
+                 guard let me = self, let id = index.element else {
+                    return
+                }
+                count += 1
+                me.taskModel.removeTask(tasks: me.allTasks, id: id)
+                .materialize()
+                .flatMap { event -> Observable<[Task]> in
+                    event.element.map(Observable.just) ?? .empty()
+                }
+                .bind(to: me._tasks)
+                .disposed(by: me.disposeBag)
+            }
+        
         _ = clearButtonTapped
             .flatMapFirst { [weak self] () -> Observable<Event<[Task]>> in
                 guard let me = self else {
@@ -74,7 +97,7 @@ final class TaskViewModel {
             .disposed(by: disposeBag)
         
         _ = itemDelete
-            .withLatestFrom(_tasks) { ($0, $1) }
+            .withLatestFrom(_tasks){ ($0, $1) }
             .flatMap { [weak self] indexPath, tasks -> Observable<Event<[Task]>> in
                 guard let me = self, indexPath.row < tasks.count else {
                     return .empty()
@@ -116,12 +139,14 @@ final class TaskViewModel {
             .disposed(by: disposeBag)
         
         _ = doneButtonClicked
+            .asObservable()
             .withLatestFrom(inputBarText)
+            .filter { $0.count > 0 } // validation
             .flatMapFirst { [weak self] text -> Observable<Event<[Task]>> in
-                guard let me = self, let content = text else {
+                guard let me = self else {
                     return .empty()
                 }
-                return me.taskModel.registerTask(tasks: me.allTasks, text: content)
+                return me.taskModel.registerTask(tasks: me.allTasks, text: text)
                 .materialize()
             }
             .flatMap { event -> Observable<[Task]> in

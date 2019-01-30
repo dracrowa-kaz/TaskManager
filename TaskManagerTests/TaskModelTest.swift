@@ -25,9 +25,36 @@ class TaskModelTest: XCTestCase {
         super.tearDown()
     }
     
+    func testRemoveTask() {
+        let tasks = [Task(id: 1, isDone: false, text: "aaa")]
+        _ = model.removeTask(tasks: tasks, id: 1).subscribe ({
+            guard let removedTasks = $0.element else {
+                return
+            }
+            XCTAssertEqual(removedTasks.count, 0)
+        })
+    }
+    
+    func testRegisterTask() {
+        _ = model.registerTask(tasks: [], text: "new").subscribe({
+            guard let tasks = $0.element else {
+                return
+            }
+            XCTAssertEqual(tasks.count, 1)
+        })
+    }
+    
+    func testClearDoneTasks() {
+        let doneTasks = [Task(id: 1, isDone: true, text: "aaa"), Task(id: 2, isDone: true, text: "aaa")]
+        _ = model.clearDoneTasks(tasks: doneTasks).subscribe({
+            guard let tasks = $0.element else {
+                return
+            }
+            XCTAssertEqual(tasks.count, 0)
+        })
+    }
+    
     func testChangeTasks() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
         let isDone = false
         let tasks = [Task(id: 1, isDone: isDone, text: "aaa")]
         _ = model.changeStateTask(tasks: tasks, id: 1).subscribe({

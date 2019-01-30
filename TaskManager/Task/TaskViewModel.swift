@@ -59,14 +59,7 @@ final class TaskViewModel {
         self.filterStatus = filterStatus
         self.reloadData = _tasks.map { _ in }
         self.deselectRow = itemSelected.map { $0 }
-        itemDeleteFromButton
-            .withLatestFrom(inputBarText) { ($0, $1) }
-            .flatMapLatest {
-            [weak self] touple -> Observable<String> in
-                return Observable.of(touple.1)
-            }.subscribe({
-                print($0)
-            })
+
         _ = itemDeleteFromButton
             .subscribe { [weak self] index in
                  guard let me = self, let id = index.element else {

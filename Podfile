@@ -12,6 +12,7 @@ target 'TaskManager' do
   target 'TaskManagerTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxTest'
   end
 
 end

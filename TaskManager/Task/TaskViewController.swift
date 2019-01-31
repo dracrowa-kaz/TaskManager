@@ -23,7 +23,7 @@ final class TaskViewController: UIViewController {
 
     private lazy var viewModel = TaskViewModel(
         inputBarText: inputBar.rx.text.orEmpty.asDriver() ,
-        doneButtonClicked: inputBar.rx.searchButtonClicked.asSignal(),
+        doneButtonClicked: inputBar.rx.searchButtonClicked.asObservable(),
         itemSelected: tableView.rx.itemSelected.asObservable(),
         filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable(),
         clearButtonTapped: inputBar.rx.resultsListButtonClicked.asObservable(),

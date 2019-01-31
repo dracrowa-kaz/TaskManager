@@ -13,6 +13,7 @@ target 'TaskManager' do
     inherit! :search_paths
     # Pods for testing
     pod 'RxTest'
+    pod 'RxBlocking', '~> 4.0'
   end
 
 end

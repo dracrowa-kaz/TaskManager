@@ -46,7 +46,7 @@ final class TaskViewModel {
     let deselectRow: Observable<IndexPath>
 
     init(inputBarText: Driver<String>,
-         doneButtonClicked: Signal<()>,
+         doneButtonClicked: Observable<Void>,
          itemSelected: Observable<IndexPath>,
          filterButtonSelected: Observable<Int>,
          filterStatus: FilterStatus = .all,

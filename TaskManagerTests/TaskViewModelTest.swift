@@ -11,6 +11,7 @@ import XCTest
 import RxSwift
 import RxCocoa
 import RxTest
+import RxBlocking
 
 class TaskViewModelTests: XCTestCase {
     
@@ -27,32 +28,58 @@ class TaskViewModelTests: XCTestCase {
     }
     
     func testExample() {
-        let inputSearchBar = UISearchBar()
-        let signal = inputSearchBar.rx.searchButtonClicked.asSignal()
-        let taskText = scheduler.createHotObservable([
-                Recorded.next(1, "a"),
-                Recorded.next(2, "b"),
-                Recorded.next(3, "c"),
-            ])
-
-        let observer = scheduler.createObserver(TaskViewModel.self)
+        // reloadData {
+        let resultText = "cde"
+        let doneEvent = scheduler.createHotObservable([
+            Recorded.next(4, ())
+        ])
         
-        let tableView = UITableView()
-
-        // Signal<()>
+        let taskText = scheduler.createHotObservable([
+            Recorded.next(1, "a"),
+            Recorded.next(2, "b"),
+            Recorded.next(3, resultText),
+        ])
+        // }
+        
+        // itemSelected {
+        let itemSelected = scheduler.createHotObservable([
+            Recorded.next(5, IndexPath(row: 0, section: 0))
+        ])
+        // }
+        
+        // itemDeleted {
+        let itemDeleted = scheduler.createHotObservable([
+            Recorded.next(6, IndexPath(row: 0, section: 0))
+        ])
+        // }
+        
         let viewModel = TaskViewModel(
             inputBarText: taskText.asObservable().asDriver(onErrorJustReturn: ""),
-            doneButtonClicked: signal,
-            itemSelected: tableView.rx.itemSelected.asObservable(),
-            filterButtonSelected: inputSearchBar.rx.selectedScopeButtonIndex.asObservable(),
-            clearButtonTapped: inputSearchBar.rx.resultsListButtonClicked.asObservable(),
-            itemDelete: tableView.rx.itemDeleted.asObservable(),
+            doneButtonClicked: doneEvent.asObservable(),
+            itemSelected: itemSelected.asObservable(),
+            filterButtonSelected: Observable<Int>.empty(),
+            clearButtonTapped: Observable<Void>.empty(),
+            itemDelete: itemDeleted.asObservable(),
             itemDeleteFromButton: PublishSubject<Double>().asObservable()
         )
-        
-        viewModel.
 
+        // reloadData
+        scheduler.scheduleAt(4, action: {
+            XCTAssertEqual(viewModel.allTasks.first!.text, resultText)
+            XCTAssertEqual(viewModel.allTasks.count, 1)
+        })
         
+        // itemSelected
+        scheduler.scheduleAt(5, action: {
+            XCTAssertEqual(viewModel.allTasks.first!.isDone, true)
+        })
+        
+        // itemDeleted
+        scheduler.scheduleAt(6, action: {
+            XCTAssertEqual(viewModel.allTasks.count, 0)
+        })
+        
+        scheduler.start()
     }
     
     func testPerformanceExample() {

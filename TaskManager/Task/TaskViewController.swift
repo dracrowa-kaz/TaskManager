@@ -9,22 +9,29 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import UIKit
 
-class TaskViewController: UIViewController {
+public enum TestError: Error {
+    case test
+}
+
+final class TaskViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputBar: UISearchBar!
     
+    var deleteIndexPathSubject = PublishSubject<IndexPath>()
+
     private lazy var viewModel = TaskViewModel(
-        inputBarText: inputBar.rx.text.asObservable(),
+        inputBarText: inputBar.rx.text.orEmpty.asDriver() ,
         doneButtonClicked: inputBar.rx.searchButtonClicked.asObservable(),
         itemSelected: tableView.rx.itemSelected.asObservable(),
         filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable(),
         clearButtonTapped: inputBar.rx.resultsListButtonClicked.asObservable(),
-        itemDelete: tableView.rx.itemDeleted.asObservable()
+        itemDelete: deleteIndexPathSubject.asObserver()
     )
     
     private let disposeBag = DisposeBag()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
@@ -57,12 +64,25 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell") as! TaskTableViewCell
         let task = viewModel.tasks[indexPath.row]
         cell.configure(task: task)
+        
+        cell.deleteButton.rx.tap.subscribe ({ [unowned self] _ in
+            self.deleteIndexPathSubject.onNext(indexPath)
+        })
+        .disposed(by: cell.disposeBag)
         return cell
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.isEditing = editing
+    }
+    
+    // this method handles row deletion
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            self.deleteIndexPathSubject.onNext(indexPath)
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E0DA90F2200A6A0001C7095 /* TaskModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0DA90E2200A6A0001C7095 /* TaskModelTest.swift */; };
 		6E7C8DF721F8169700EF46BC /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8DF621F8169700EF46BC /* TaskViewModel.swift */; };
 		6E7C8DF821F8169700EF46BC /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8DF621F8169700EF46BC /* TaskViewModel.swift */; };
 		6E7C8DFA21F816AE00EF46BC /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7C8DF921F816AE00EF46BC /* TaskModel.swift */; };
@@ -24,7 +25,7 @@
 		6E8321D721F8101E004286CE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E8321D521F8101E004286CE /* Main.storyboard */; };
 		6E8321D921F8101F004286CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E8321D821F8101F004286CE /* Assets.xcassets */; };
 		6E8321DC21F8101F004286CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E8321DA21F8101F004286CE /* LaunchScreen.storyboard */; };
-		6E8321E721F8101F004286CE /* TaskManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8321E621F8101F004286CE /* TaskManagerTests.swift */; };
+		6E8321E721F8101F004286CE /* TaskViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8321E621F8101F004286CE /* TaskViewModelTest.swift */; };
 		D279E250C4011CF9F143A918 /* Pods_TaskManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E1C54C322C34C6ABAE40E9C /* Pods_TaskManager.framework */; };
 		FBC4D50EBAE4881BCE930901 /* Pods_TaskManagerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39C9A1556EFF177ECB28D041 /* Pods_TaskManagerTests.framework */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		1469EF14ACB3D762A4D60C1C /* Pods-TaskManagerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskManagerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskManagerTests/Pods-TaskManagerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1E573DFF390977FA973D0F7D /* Pods-TaskManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskManager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaskManager/Pods-TaskManager.debug.xcconfig"; sourceTree = "<group>"; };
 		39C9A1556EFF177ECB28D041 /* Pods_TaskManagerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskManagerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E0DA90E2200A6A0001C7095 /* TaskModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModelTest.swift; sourceTree = "<group>"; };
 		6E7C8DF621F8169700EF46BC /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		6E7C8DF921F816AE00EF46BC /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		6E7C8DFD21F828AE00EF46BC /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -58,7 +60,7 @@
 		6E8321DB21F8101F004286CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E8321DD21F8101F004286CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E8321E221F8101F004286CE /* TaskManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E8321E621F8101F004286CE /* TaskManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerTests.swift; sourceTree = "<group>"; };
+		6E8321E621F8101F004286CE /* TaskViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModelTest.swift; sourceTree = "<group>"; };
 		6E8321E821F8101F004286CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E1C54C322C34C6ABAE40E9C /* Pods_TaskManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE43E9F631C1ACC132B6D21B /* Pods-TaskManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskManager.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaskManager/Pods-TaskManager.release.xcconfig"; sourceTree = "<group>"; };
@@ -143,7 +145,8 @@
 		6E8321E521F8101F004286CE /* TaskManagerTests */ = {
 			isa = PBXGroup;
 			children = (
-				6E8321E621F8101F004286CE /* TaskManagerTests.swift */,
+				6E8321E621F8101F004286CE /* TaskViewModelTest.swift */,
+				6E0DA90E2200A6A0001C7095 /* TaskModelTest.swift */,
 				6E8321E821F8101F004286CE /* Info.plist */,
 			);
 			path = TaskManagerTests;
@@ -289,9 +292,18 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TaskManagerTests/Pods-TaskManagerTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -390,9 +402,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E7C8DFF21F828AE00EF46BC /* Task.swift in Sources */,
+				6E0DA90F2200A6A0001C7095 /* TaskModelTest.swift in Sources */,
 				6E7C8DFB21F816AE00EF46BC /* TaskModel.swift in Sources */,
 				6E7C8E0321F846E300EF46BC /* TaskTableViewCell.swift in Sources */,
-				6E8321E721F8101F004286CE /* TaskManagerTests.swift in Sources */,
+				6E8321E721F8101F004286CE /* TaskViewModelTest.swift in Sources */,
 				6E7C8DF821F8169700EF46BC /* TaskViewModel.swift in Sources */,
 				6E7C8E0821F847D200EF46BC /* GDCheckbox.swift in Sources */,
 			);

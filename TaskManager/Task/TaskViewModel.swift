@@ -52,7 +52,6 @@ final class TaskViewModel {
          filterStatus: FilterStatus = .all,
          clearButtonTapped: Observable<Void>,
          itemDelete: Observable<IndexPath>,
-         itemDeleteFromButton: Observable<Double>,
          taskModel: TaskModelProtocol = TaskModel()) {
         
         self.taskModel = taskModel
@@ -60,21 +59,23 @@ final class TaskViewModel {
         self.reloadData = _tasks.map { _ in }
         self.deselectRow = itemSelected.map { $0 }
 
-        _ = itemDeleteFromButton
-            .subscribe { [weak self] index in
-                 guard let me = self, let id = index.element else {
+        _ = itemDelete
+            .withLatestFrom(_tasks){ ($0, $1) }
+            .subscribe { [weak self] indexPath in
+                guard let me = self, let indexPath = indexPath.element?.0 else {
                     return
                 }
-                count += 1
-                me.taskModel.removeTask(tasks: me.allTasks, id: id)
-                .materialize()
-                .flatMap { event -> Observable<[Task]> in
-                    event.element.map(Observable.just) ?? .empty()
-                }
-                .bind(to: me._tasks)
-                .disposed(by: me.disposeBag)
+                
+                let task = me.tasks[indexPath.row]
+                me.taskModel.removeTask(tasks: me.allTasks, id: task.id)
+                    .materialize()
+                    .flatMap { event -> Observable<[Task]> in
+                        event.element.map(Observable.just) ?? .empty()
+                    }
+                    .bind(to: me._tasks)
+                    .disposed(by: me.disposeBag)
             }
-        
+
         _ = clearButtonTapped
             .flatMapFirst { [weak self] () -> Observable<Event<[Task]>> in
                 guard let me = self else {
@@ -89,22 +90,7 @@ final class TaskViewModel {
             .bind(to: _tasks)
             .disposed(by: disposeBag)
         
-        _ = itemDelete
-            .withLatestFrom(_tasks){ ($0, $1) }
-            .flatMap { [weak self] indexPath, tasks -> Observable<Event<[Task]>> in
-                guard let me = self, indexPath.row < tasks.count else {
-                    return .empty()
-                }
-                let task = me.tasks[indexPath.row]
-                return me.taskModel.removeTask(tasks: me.allTasks, id: task.id)
-                    .materialize()
-            }
-            .flatMap { event -> Observable<[Task]> in
-                event.element.map(Observable.just) ?? .empty()
-            }
-            .bind(to: _tasks)
-            .disposed(by: disposeBag)
-            
+
         _ = filterButtonSelected
             .subscribe { [weak self] index in
                 guard

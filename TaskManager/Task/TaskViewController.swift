@@ -19,7 +19,7 @@ final class TaskViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputBar: UISearchBar!
     
-    var deleteIdSubject = PublishSubject<Double>()
+    var deleteIndexPathSubject = PublishSubject<IndexPath>()
 
     private lazy var viewModel = TaskViewModel(
         inputBarText: inputBar.rx.text.orEmpty.asDriver() ,
@@ -27,8 +27,7 @@ final class TaskViewController: UIViewController {
         itemSelected: tableView.rx.itemSelected.asObservable(),
         filterButtonSelected: inputBar.rx.selectedScopeButtonIndex.asObservable(),
         clearButtonTapped: inputBar.rx.resultsListButtonClicked.asObservable(),
-        itemDelete: tableView.rx.itemDeleted.asObservable(),
-        itemDeleteFromButton: deleteIdSubject.asObserver()
+        itemDelete: deleteIndexPathSubject.asObserver()
     )
     
     private let disposeBag = DisposeBag()
@@ -67,7 +66,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(task: task)
         
         cell.deleteButton.rx.tap.subscribe ({ [unowned self] _ in
-            self.deleteIdSubject.onNext(task.id)
+            self.deleteIndexPathSubject.onNext(indexPath)
         })
         .disposed(by: cell.disposeBag)
         return cell
@@ -76,6 +75,14 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.isEditing = editing
+    }
+    
+    // this method handles row deletion
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            self.deleteIndexPathSubject.onNext(indexPath)
+        }
     }
 }
 

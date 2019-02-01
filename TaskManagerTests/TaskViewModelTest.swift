@@ -59,8 +59,7 @@ class TaskViewModelTests: XCTestCase {
             itemSelected: itemSelected.asObservable(),
             filterButtonSelected: Observable<Int>.empty(),
             clearButtonTapped: Observable<Void>.empty(),
-            itemDelete: itemDeleted.asObservable(),
-            itemDeleteFromButton: PublishSubject<Double>().asObservable()
+            itemDelete: itemDeleted.asObservable()
         )
 
         // reloadData
